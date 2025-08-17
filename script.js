@@ -104,6 +104,7 @@ let blogPosts = [
 let appointments = [
     {
         id: 1,
+        appointmentNumber: "APT-123456",
         name: "Rajesh Kumar",
         email: "rajesh@example.com",
         phone: "9876543210",
@@ -114,6 +115,7 @@ let appointments = [
     },
     {
         id: 2,
+        appointmentNumber: "APT-789012",
         name: "Priya Singh",
         email: "priya@example.com",
         phone: "8765432109",
@@ -284,7 +286,11 @@ document.getElementById('blogForm').addEventListener('submit', (e) => {
 appointmentForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
+    // Generate unique appointment number
+    const appointmentNumber = 'APT-' + Date.now().toString().slice(-6);
+    
     const appointmentData = {
+        appointmentNumber: appointmentNumber,
         name: document.getElementById('name').value,
         email: document.getElementById('email').value,
         phone: document.getElementById('phone').value,
@@ -303,7 +309,12 @@ appointmentForm.addEventListener('submit', (e) => {
     // Reset form
     appointmentForm.reset();
     
-    alert('Appointment booked successfully! We will contact you shortly to confirm.');
+    // Show appointment confirmation to user
+    document.getElementById('confirmationNumber').textContent = appointmentNumber;
+    document.getElementById('appointmentConfirmation').style.display = 'block';
+    
+    // Scroll to confirmation
+    document.getElementById('appointmentConfirmation').scrollIntoView({ behavior: 'smooth' });
 });
 
 // Load More Gallery
@@ -398,11 +409,12 @@ function loadAppointmentsList() {
         listItem.className = 'admin-list-item';
         listItem.innerHTML = `
             <div>
-                <strong>${appointment.name}</strong>
-                <p>${appointment.email} | ${appointment.phone}</p>
-                <p>Service: ${appointment.service}</p>
-                <p>Date: ${appointment.date} at ${appointment.time}</p>
-                <p>Message: ${appointment.message}</p>
+                <strong>Appointment #${appointment.appointmentNumber}</strong>
+                <p><strong>Name:</strong> ${appointment.name}</p>
+                <p><strong>Email:</strong> ${appointment.email} | <strong>Phone:</strong> ${appointment.phone}</p>
+                <p><strong>Service:</strong> ${appointment.service}</p>
+                <p><strong>Date:</strong> ${appointment.date} at ${appointment.time}</p>
+                <p><strong>Message:</strong> ${appointment.message}</p>
             </div>
             <div class="admin-actions">
                 <button class="btn-small btn-delete" onclick="deleteAppointment(${appointment.id})">Delete</button>
